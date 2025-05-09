@@ -10,24 +10,27 @@ def refresh_categories(grid,page):
         cursor.execute("SELECT id, name, icon FROM categories")
         categories = cursor.fetchall()
         
-        for cat_id, cat_name, cat_icon in categories:
-            grid.controls.append(
-                ft.Container(
-                    height=30,
-                    bgcolor=ft.colors.with_opacity(0.3,color=ft.colors.BLUE_ACCENT_700),
-                    border_radius=ft.border_radius.all(10),
-                    content=ft.Row(
-                        [
-                            ft.Icon(name=cat_icon, size=16),
-                            ft.Text(cat_name, size=12, weight=ft.FontWeight.W_700),
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                    ),
-                    padding=ft.padding.symmetric(horizontal=3),
-                    alignment=ft.alignment.center,
-                    on_click=lambda _, id=cat_id: page.go(f"/tasks/{id}")
+        if len(categories) > 0:
+            for cat_id, cat_name, cat_icon in categories:
+                grid.controls.append(
+                    ft.Container(
+                        height=30,
+                        bgcolor=ft.colors.with_opacity(0.3,color=ft.colors.BLUE_ACCENT_700),
+                        border_radius=ft.border_radius.all(10),
+                        content=ft.Row(
+                            [
+                                ft.Icon(name=cat_icon, size=16),
+                                ft.Text(cat_name, size=12, weight=ft.FontWeight.W_700),
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        padding=ft.padding.symmetric(horizontal=3),
+                        alignment=ft.alignment.center,
+                        on_click=lambda _, id=cat_id: page.go(f"/tasks/{id}")
+                    )
                 )
-            )
+
+
     page.update()
 
 grid = ft.GridView(

@@ -4,11 +4,38 @@ import sqlite3
 from pages.landing import refresh_categories,grid
 
 
-db_file = "tasks.db"
+db_file = "./tasks.db"
+
+def dbInitializer():
+    # Ensure the tasks database exists
+    with sqlite3.connect("tasks.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                subtitle TEXT,
+                position INTEGER NOT NULL,
+                category_id INTEGER NOT NULL
+            )
+        """)
+        conn.commit()
+
+    # Ensure the categories database exists
+    with sqlite3.connect("categories.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                icon TEXT NOT NULL
+            )
+        """)
+        conn.commit()
 
 def create_category_dialog(page):
     icon_options = {
-        "Work": "work",
+        "Work": "work", 
         "Person": "person",
         "Shopping Cart": "shopping_cart",
         "Fitness": "fitness_center",

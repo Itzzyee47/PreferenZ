@@ -177,7 +177,7 @@ def Tasks(page, category_id):
                     min_height=20,
                     key=str(task["id"]),
                     data=[task["subtitle"], task["title"]],
-                    on_long_press=lambda e: show_edit_delete_dialog(e),
+                    on_click=lambda e: show_edit_delete_dialog(e),
                 )
             )
 

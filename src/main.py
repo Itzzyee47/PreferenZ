@@ -4,7 +4,7 @@ from pages.settings import Settings
 from pages.profile import Profile
 from pages.landing import landing,grid,refresh_categories
 from pages.tasks import Tasks
-from pages.component1 import create_category_dialog, create_fab, create_fab2, create_task_dialog, deleteCatById
+from pages.component1 import create_category_dialog, create_fab, create_fab2, create_task_dialog, dbInitializer, deleteCatById
 import sqlite3
 
 
@@ -13,12 +13,10 @@ def main(page: ft.Page):
     page.title = 'PreferenZ'
     page.window.width = 330
     page.window.height = 630
-    page.window.always_on_top = True 
-    page.theme_mode = ft.ThemeMode.LIGHT
-    page.theme = ft.Theme(color_scheme=ft.ColorScheme(secondary=ft.Colors.GREEN_500),
-                          color_scheme_seed=ft.Colors.BLUE)
-     
+    page.window.resizable = False
+    page.window.always_on_top = True
     counter = ft.Text("0", size=50, data=0)
+    dbInitializer()
 
     def increment_click(e):
         counter.data += 1
@@ -108,7 +106,7 @@ def main(page: ft.Page):
         return dialog2
 
     pages = {
-        '/h': ft.View("/h",[home],padding=ft.padding.only(left=6,right=6)),
+        '/': ft.View("/",[home],padding=ft.padding.only(left=6,right=6)),
         "/landing": ft.View("/landing",[land],appbar= bar1,floating_action_button=fab,
                            padding=ft.padding.only(left=6,right=6,)
                            ),
@@ -124,7 +122,7 @@ def main(page: ft.Page):
         #print(page.route, route)
         page.views.clear() 
         page.views.append(    
-            pages['/h']
+            pages['/']
         )  
         
         if page.route == "/settings": 
@@ -192,7 +190,7 @@ def main(page: ft.Page):
     page.on_route_change = route_change
     page.on_view_pop = view_pop
 
-    page.go("/h")
+    page.go("/")
 
     def getCatNameById(id):
         try:
@@ -209,4 +207,6 @@ def main(page: ft.Page):
                 conn.close()
 
 
-ft.app(main)
+ft.app(main,view=ft.AppView.FLET_APP)
+
+#673508496
