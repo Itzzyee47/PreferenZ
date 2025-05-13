@@ -93,9 +93,11 @@ def Tasks(page, category_id):
                 color = ft.colors.GREEN
                 return color
             
-    def show_edit_delete_dialog(e):
+    def show_edit_delete_dialog(e,task_id):
 
-        def save_changes():
+        def save_changes(e,task_id):
+            # print(task_id) 
+            # print(category_id)
             try:
                 with sqlite3.connect(db_file) as conn:
                     cursor = conn.cursor()
@@ -103,22 +105,22 @@ def Tasks(page, category_id):
                         UPDATE tasks 
                         SET title = ?, subtitle = ? 
                         WHERE id = ? AND category_id = ?
-                    """, (e.control.title.value, e.control.subtitle.value, e.control.key, category_id))
+                    """, (e.control.parent.parent.content.controls[0].value, e.control.parent.parent.content.controls[1].value, task_id, category_id))
                     conn.commit()
                 dialog.open = False
                 loadData()
-                page.update()
+                e.page.update()
             except Exception as er:
                 print(f"Error updating task: {er}")
 
-        def delete_task():
+        def delete_task(task_id):
             try:
                 with sqlite3.connect(db_file) as conn:
                     cursor = conn.cursor()
                     cursor.execute("""
                         DELETE FROM tasks 
                         WHERE id = ? AND category_id = ?
-                    """, (e.control.key, category_id))
+                    """, (task_id, category_id))
                     conn.commit()
                 dialog.open = False
                 loadData()
@@ -148,8 +150,8 @@ def Tasks(page, category_id):
             actions=[
                 ft.Row(
                     [
-                        ft.TextButton("Save", style=ft.ButtonStyle(color=ft.colors.GREEN), on_click= lambda _: save_changes()),
-                        ft.TextButton("Delete", style=ft.ButtonStyle(color=ft.colors.RED_ACCENT), on_click= lambda _: delete_task()),
+                        ft.TextButton("Save", style=ft.ButtonStyle(color=ft.colors.GREEN), on_click= lambda e: save_changes(e,task_id)),
+                        ft.TextButton("Delete", style=ft.ButtonStyle(color=ft.colors.RED_ACCENT), on_click= lambda _: delete_task(task_id)),
                         ft.TextButton("Cancel", style=ft.ButtonStyle(color=ft.colors.BLUE_ACCENT), on_click=lambda e: close(e)),
                     ]
                 )  
@@ -159,8 +161,8 @@ def Tasks(page, category_id):
             open=True,
             
         )
-        page.open(dialog)
-        page.update()
+        e.page.open(dialog)
+        e.page.update()
 
 
     def loadData():
@@ -177,7 +179,7 @@ def Tasks(page, category_id):
                     min_height=20,
                     key=str(task["id"]),
                     data=[task["subtitle"], task["title"]],
-                    on_click=lambda e: show_edit_delete_dialog(e),
+                    on_click =lambda e: show_edit_delete_dialog(e,task["id"]),
                 )
             )
 

@@ -6,6 +6,7 @@ from pages.landing import landing,grid,refresh_categories
 from pages.tasks import Tasks
 from pages.component1 import create_category_dialog, create_fab, create_fab2, create_task_dialog, dbInitializer, deleteCatById
 import sqlite3
+from pages.about import About
 
 
 
@@ -15,13 +16,8 @@ def main(page: ft.Page):
     page.window.height = 630
     page.window.resizable = False
     page.window.always_on_top = True
-    counter = ft.Text("0", size=50, data=0)
     dbInitializer()
 
-    def increment_click(e):
-        counter.data += 1
-        counter.value = str(counter.data)
-        counter.update()
 
     def view_pop(view):
         try:
@@ -35,9 +31,6 @@ def main(page: ft.Page):
             print(f"The usual pop error! {er}")
         page.update()
  
-    float = ft.FloatingActionButton(
-        icon=ft.Icons.ADD, on_click=increment_click 
-    )
     navbar = ft.NavigationBar(destinations=[
                 ft.NavigationBarDestination(icon=ft.Icons.EXPLORE, label="Explore"),
                 ft.NavigationBarDestination(icon=ft.Icons.COMMUTE, label="Commute"),
@@ -74,7 +67,7 @@ def main(page: ft.Page):
 
     img = ft.Image(f'/imgs/icon.png') 
     home = Home(page) 
-    settings = Settings(counter,view_pop,page)
+    settings = Settings(view_pop,page)
     profile = Profile(view_pop,page)     
     land = landing(page,grid)
     action = ft.FloatingActionButton(
@@ -111,11 +104,19 @@ def main(page: ft.Page):
                            padding=ft.padding.only(left=6,right=6,)
                            ),
         "/settings": ft.View("/settings",[settings],appbar=ft.AppBar(title=ft.Text("Settings",size=15,weight=ft.FontWeight.BOLD),), 
-                             floating_action_button=float,scroll=ft.ScrollMode.AUTO,padding=ft.padding.only(left=6,right=6)
+                             scroll=ft.ScrollMode.AUTO, padding=ft.padding.only(left=6,right=6)
                              ),
         "/profile": ft.View("/profile",[profile],appbar=ft.AppBar(title=ft.Text("Profile",size=15,weight=ft.FontWeight.BOLD)),
                             padding=ft.padding.only(left=6,right=6)
                             ),
+        "/about": ft.View(
+                            "/about",
+                            [About(page)],
+                            appbar=ft.AppBar(
+                                title=ft.Text("About PreferenZ", size=15, weight=ft.FontWeight.BOLD),
+                            ),
+                            padding=ft.padding.only(left=6, right=6)
+                        ),
     }
     
     def route_change(route):
@@ -135,7 +136,7 @@ def main(page: ft.Page):
                 ) 
             except Exception as er:
                 print("The usual pop error")
-        elif page.route == "/profile": 
+        elif page.route == "/about": 
             try:
                 page.views.append(    
                     pages['/settings']
