@@ -12,7 +12,8 @@ def About(page):
             "Organize tasks by priority",
             "Reorderable task lists",
             "Category-specific task management",
-            "Simple and intuitive interface"
+            "Simple and intuitive interface",
+            "Export or import database to(from) local files"
         ],
         "tech_stack": [
             "Built with Flet 0.27.6",

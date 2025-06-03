@@ -4,11 +4,11 @@ import sqlite3
 from pages.landing import refresh_categories,grid
 
 
-db_file = "./tasks.db"
+db_file = "./preferez.db"
 
 def dbInitializer():
-    # Ensure the tasks database exists
-    with sqlite3.connect("tasks.db") as conn:
+    # Ensure the tasks table exists
+    with sqlite3.connect("preferez.db") as conn:
         cursor = conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS tasks (
@@ -21,8 +21,8 @@ def dbInitializer():
         """)
         conn.commit()
 
-    # Ensure the categories database exists
-    with sqlite3.connect("categories.db") as conn:
+    # Ensure the categories table exists
+    with sqlite3.connect("preferez.db") as conn:
         cursor = conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS categories (
@@ -71,7 +71,7 @@ def create_category_dialog(page):
         icon = icon_dropdown.value
 
         if name and icon:
-            with sqlite3.connect("categories.db") as conn:
+            with sqlite3.connect("preferez.db") as conn:
                 cursor = conn.cursor()
                 cursor.execute(
                     "INSERT INTO categories (name, icon) VALUES (?, ?)",
@@ -135,11 +135,11 @@ def create_task_dialog(page, category_id, lists):
                 ORDER BY position
             """, (category_id,))
             rows = cursor.fetchall()
+            print(f"Loaded tasks for: {rows}..............")
             if not rows:
                 return [{"id": "1", "title": "No Task added", "subtitle": "Add a new task", "position": "0"} ]
             else:
-                return [{"id": row[0], "title": row[1], "subtitle": row[2], "position": row[3]} 
-                   for row in rows]
+                return [{"id": row[0], "title": row[1], "subtitle": row[2], "position": row[3]} for row in rows]
             
     def getColorBasedOnPosition(total_tasks, index):
         # Determine the color based on the position
@@ -154,7 +154,9 @@ def create_task_dialog(page, category_id, lists):
                 return color
 
     def loadData(lists):
+       
         tasks = load_tasks()
+        print(f"Loading data for items for list: {lists} {tasks}")
         lists.controls.clear()
         total_tasks = len(tasks)
         for index, task in enumerate(tasks):
@@ -176,7 +178,7 @@ def create_task_dialog(page, category_id, lists):
         description = description_field.value
 
         if title:
-            with sqlite3.connect("tasks.db") as conn:
+            with sqlite3.connect("preferez.db") as conn:
                 cursor = conn.cursor()
                 # Get the current position value
                 cursor.execute(
@@ -223,7 +225,7 @@ def create_task_dialog(page, category_id, lists):
 def deleteCatById(id,page):
     try:
         deleteTaskForCategory(id)
-        conn = sqlite3.connect("categories.db")
+        conn = sqlite3.connect("preferez.db")
         cursor = conn.cursor()
         cursor.execute("DELETE FROM categories WHERE id = ?", (id,))
         conn.commit()
@@ -239,7 +241,7 @@ def deleteCatById(id,page):
 
 def deleteTaskForCategory(id):
     try:
-        conn = sqlite3.connect("tasks.db")
+        conn = sqlite3.connect("preferez.db")
         cursor = conn.cursor()
         cursor.execute("DELETE FROM tasks WHERE category_id = ?", (id,))
         conn.commit()

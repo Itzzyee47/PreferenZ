@@ -5,7 +5,7 @@ import sqlite3
 def refresh_categories(grid,page):
     """Refresh the categories displayed in the grid."""
     grid.controls.clear()
-    with sqlite3.connect("categories.db") as conn:
+    with sqlite3.connect("preferez.db") as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT id, name, icon FROM categories")
         categories = cursor.fetchall()

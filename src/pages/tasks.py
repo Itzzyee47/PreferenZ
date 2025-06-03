@@ -7,7 +7,7 @@ import os
 
 def Tasks(page, category_id):
     # Path to SQLite database file
-    db_file = "tasks.db"
+    db_file = "preferez.db"
     category_id = int(page.route.split('/')[-1])
     print(f'THis the page route: {page.route}')
 
@@ -43,8 +43,7 @@ def Tasks(page, category_id):
             if not rows:
                 return [{"id": "1", "title": "No Task added", "subtitle": "Add a new task", "position": "0"} ]
             else:
-                return [{"id": row[0], "title": row[1], "subtitle": row[2], "position": row[3]} 
-                   for row in rows]
+                return [{"id": row[0], "title": row[1], "subtitle": row[2], "position": row[3]} for row in rows]
 
 
     def save_tasks(old_index, new_index):
@@ -71,7 +70,8 @@ def Tasks(page, category_id):
 
     # ...  ...
     def on_reorder(e):
-        print(f"Item reordered from {e.old_index} to {e.new_index}")
+        """ A function called to reorder the tasks """
+        # print(f"Item reordered from {e.old_index} to {e.new_index}")
         save_tasks(e.old_index, e.new_index)
         loadData()
         page.update()
@@ -93,11 +93,13 @@ def Tasks(page, category_id):
                 color = ft.colors.GREEN
                 return color
             
-    def show_edit_delete_dialog(e,task_id):
+    def show_edit_delete_dialog(e, task_id):
+        """Show a dialog to edit or delete a task."""
+        # print('The key for show: ' + e.control.key)
 
-        def save_changes(e,task_id):
-            # print(task_id) 
-            # print(category_id)
+        def save_changes(task_id):
+            # print(f'The key for save {e.control.key}')
+            # print(f'The supposed key from dialog {task_id}')
             try:
                 with sqlite3.connect(db_file) as conn:
                     cursor = conn.cursor()
@@ -105,7 +107,12 @@ def Tasks(page, category_id):
                         UPDATE tasks 
                         SET title = ?, subtitle = ? 
                         WHERE id = ? AND category_id = ?
-                    """, (e.control.parent.parent.content.controls[0].value, e.control.parent.parent.content.controls[1].value, task_id, category_id))
+                    """, (
+                        title_field.value,
+                        subtitle_field.value,
+                        task_id,
+                        category_id
+                    ))
                     conn.commit()
                 dialog.open = False
                 loadData()
@@ -114,6 +121,7 @@ def Tasks(page, category_id):
                 print(f"Error updating task: {er}")
 
         def delete_task(task_id):
+            print(f"Deleting task with ID: {task_id} and category ID: {category_id}")
             try:
                 with sqlite3.connect(db_file) as conn:
                     cursor = conn.cursor()
@@ -131,35 +139,54 @@ def Tasks(page, category_id):
         def close(e):
             title_field.value = ""
             subtitle_field.value = ""
-
             page.close(dialog)
 
-        title_field = ft.TextField(label="Title", value=e.control.title.value, 
-                                   border=ft.InputBorder.UNDERLINE,
-                                    hint_text="title")
-        subtitle_field = ft.TextField(label="Subtitle", value=e.control.subtitle.value, 
-                                   border=ft.InputBorder.UNDERLINE,
-                                    hint_text="subtitle")
-        
-        # print(e.control.key)
+        title_field = ft.TextField(
+            label="Title",
+            value=e.control.title.value,
+            border=ft.InputBorder.UNDERLINE,
+            hint_text="title"
+        )
+        subtitle_field = ft.TextField(
+            label="Subtitle",
+            value=e.control.subtitle.value,
+            border=ft.InputBorder.UNDERLINE,
+            hint_text="subtitle"
+        )
 
         dialog = ft.AlertDialog(
             modal=True,
-            title=ft.Text("Edit or Delete Task",size=19,weight=ft.FontWeight.BOLD,text_align=ft.TextAlign.CENTER),
-            content=ft.Column([title_field, subtitle_field],tight=True,spacing=10), 
+            title=ft.Text(
+                "Edit or Delete Task",
+                size=19,
+                weight=ft.FontWeight.BOLD,
+                text_align=ft.TextAlign.CENTER
+            ),
+            content=ft.Column([title_field, subtitle_field], tight=True, spacing=10),
             actions=[
                 ft.Row(
                     [
-                        ft.TextButton("Save", style=ft.ButtonStyle(color=ft.colors.GREEN), on_click= lambda e: save_changes(e,task_id)),
-                        ft.TextButton("Delete", style=ft.ButtonStyle(color=ft.colors.RED_ACCENT), on_click= lambda _: delete_task(task_id)),
-                        ft.TextButton("Cancel", style=ft.ButtonStyle(color=ft.colors.BLUE_ACCENT), on_click=lambda e: close(e)),
+                        ft.TextButton(
+                            "Save",
+                            style=ft.ButtonStyle(color=ft.colors.GREEN),
+                            on_click=lambda _: save_changes(e.control.key)
+                        ),
+                        ft.TextButton(
+                            "Delete",
+                            style=ft.ButtonStyle(color=ft.colors.RED_ACCENT),
+                            on_click=lambda _: delete_task(e.control.key)
+                        ),
+                        ft.TextButton(
+                            "Cancel",
+                            style=ft.ButtonStyle(color=ft.colors.BLUE_ACCENT),
+                            on_click=lambda e: close(e)
+                        ),
                     ]
-                )  
+                )
             ],
             actions_alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             alignment=ft.alignment.center,
             open=True,
-            
         )
         e.page.open(dialog)
         e.page.update()

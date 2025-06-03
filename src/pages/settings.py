@@ -5,9 +5,15 @@ def Settings(pop,page):
 
     lists.controls.append(
         ft.ListTile(
-        leading=ft.Icon(name=ft.Icons.DETAILS_OUTLINED),
-        title=ft.Text(f"About PreferenZ"),min_height=20,
+        leading=ft.Icon(name=ft.Icons.MORE),
+        title=ft.Text(f"About PreferenZ"),min_height=40, 
         on_click=lambda e: page.go('/about')
+    ))
+    lists.controls.append(
+        ft.ListTile(
+        leading=ft.Icon(name=ft.Icons.STORAGE_OUTLINED),
+        title=ft.Text(f"Data Management"),min_height=40,
+        on_click=lambda e: page.go('/dataManager')
     ))
 
 

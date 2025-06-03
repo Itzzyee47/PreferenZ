@@ -3,10 +3,11 @@ from pages.home import Home
 from pages.settings import Settings
 from pages.profile import Profile
 from pages.landing import landing,grid,refresh_categories
+from pages.settingsPages.dataManager import DataManager
 from pages.tasks import Tasks
 from pages.component1 import create_category_dialog, create_fab, create_fab2, create_task_dialog, dbInitializer, deleteCatById
 import sqlite3
-from pages.about import About
+from pages.settingsPages.about import About
 
 
 
@@ -117,6 +118,12 @@ def main(page: ft.Page):
                             ),
                             padding=ft.padding.only(left=6, right=6)
                         ),
+        "/dataManager": ft.View(
+            "/dataManager", [DataManager(page)],
+            appbar=ft.AppBar(
+                        title=ft.Text("Data Manager", size=15, weight=ft.FontWeight.BOLD),
+                    ),padding=ft.padding.only(left=6, right=6)
+        )
     }
     
     def route_change(route):
@@ -137,6 +144,16 @@ def main(page: ft.Page):
             except Exception as er:
                 print("The usual pop error")
         elif page.route == "/about": 
+            try:
+                page.views.append(    
+                    pages['/settings']
+                ) 
+                page.views.append(
+                    pages[page.route]
+                ) 
+            except Exception as er:
+                print("The usual pop error")
+        elif page.route == "/dataManager": 
             try:
                 page.views.append(    
                     pages['/settings']
@@ -195,7 +212,7 @@ def main(page: ft.Page):
 
     def getCatNameById(id):
         try:
-            conn = sqlite3.connect('categories.db')  # Replace with your database file
+            conn = sqlite3.connect('preferez.db')  # Replace with your database file
             cursor = conn.cursor()
             cursor.execute("SELECT name FROM categories WHERE id = ?", (id,))
             result = cursor.fetchone()

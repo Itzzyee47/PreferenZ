@@ -8,7 +8,8 @@ authors = [
     { name = "Nzenze Lovis", email = "ebongloveis@gemail.com" }
 ]
 dependencies = [
-  "flet==0.27.6"
+  "flet==0.27.6",
+  "pandas","openpyxl"
 ]
 
 [tool.flet] 
