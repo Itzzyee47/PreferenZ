@@ -21,7 +21,7 @@ def Settings(pop,page):
     return ft.SafeArea( 
             content=ft.Column(
                 [
-                    lists
+                    lists,
                 ],scroll=ft.ScrollMode.ALWAYS
             ), expand= True
         )  

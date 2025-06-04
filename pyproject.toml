@@ -1,6 +1,6 @@
 [project]
 name = "PreferenZ"
-version = "0.1.0"
+version = "0.1.1"
 description = "A task management application that help you organize your work in to various categories and according to importance"
 readme = "README.md"
 requires-python = ">=3.9"

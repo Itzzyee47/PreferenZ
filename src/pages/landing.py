@@ -56,7 +56,7 @@ def landing(page,grid):
                     ft.Container(
                         height=120,
                         bgcolor=ft.colors.with_opacity(0.3,color=ft.colors.BLUE_ACCENT_700), 
-                        border_radius=ft.border_radius.all(10),
+                        border_radius=ft.border_radius.all(10),aspect_ratio=1.9,
                         content=ft.Text(
                             "Welcome to preferenZ, your all in one task manager/organiser",
                             size=19,

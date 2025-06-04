@@ -3,7 +3,7 @@ import flet as ft
 def About(page):
     app_info = {
         "name": "PreferenZ",
-        "version": "1.0.1",
+        "version": "0.1.1",
         "description": "A task management application that helps you organize your work into various categories and according to importance",
         "developer": "Nzenze Lovis",
         "email": "ebongloveis@gmail.com",
@@ -31,22 +31,22 @@ def About(page):
                     ft.Text(
                         f"Version {app_info['version']}", 
                         size=16,
-                        color=ft.colors.GREY_500
+                        color=ft.colors.GREY_700
                     ),
                     ft.Divider(),
                     ft.Text(
                         app_info['description'],
                         text_align=ft.TextAlign.CENTER,
-                        size=14
+                        size=14,color=ft.colors.GREY_700
                     ),
                     ft.Container(height=20),
-                    ft.Text("Features:", weight=ft.FontWeight.BOLD),
+                    ft.Text("Features:", weight=ft.FontWeight.BOLD,color=ft.colors.GREY),
                     ft.Column([
-                        ft.Text(f"• {feature}", size=14) 
+                        ft.Text(f"• {feature}", size=14,color=ft.colors.GREY_700) 
                         for feature in app_info['features']
                     ]),
                     ft.Container(height=20),
-                    ft.Text("Technical Details:", weight=ft.FontWeight.BOLD),
+                    ft.Text("Technical Details:", weight=ft.FontWeight.BOLD,color=ft.colors.GREY),
                     ft.Column([
                         ft.Text(tech, size=14, color=ft.colors.GREY_700) 
                         for tech in app_info['tech_stack']

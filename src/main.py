@@ -17,6 +17,7 @@ def main(page: ft.Page):
     page.window.height = 630
     page.window.resizable = False
     page.window.always_on_top = True
+    # page.theme_mode = ft.ThemeMode.DARK
     dbInitializer()
 
 
