@@ -3,7 +3,7 @@ from pages.home import Home
 from pages.settings import Settings
 from pages.profile import Profile
 from pages.landing import landing,grid,refresh_categories
-from pages.settingsPages.dataManager import DataManager
+from pages.settingsPages.dataManager import DataManager,startUpDataLoaderPage
 from pages.tasks import Tasks
 from pages.component1 import create_category_dialog, create_fab, create_fab2, create_task_dialog, dbInitializer, deleteCatById
 import sqlite3
@@ -122,7 +122,14 @@ def main(page: ft.Page):
         "/dataManager": ft.View(
             "/dataManager", [DataManager(page)],
             appbar=ft.AppBar(
-                        title=ft.Text("Data Manager", size=15, weight=ft.FontWeight.BOLD),
+                        title=ft.Text("Data Manager", size=15, weight=ft.FontWeight.BOLD),actions=[
+                            ft.IconButton( 
+                                icon=ft.icons.REFRESH,
+                                icon_color=ft.colors.BLUE_ACCENT_700,
+                                tooltip="Refresh",
+                                on_click=lambda e: startUpDataLoaderPage(e.page),
+                            )
+                        ],
                     ),padding=ft.padding.only(left=6, right=6)
         )
     }

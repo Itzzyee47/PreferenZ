@@ -29,16 +29,24 @@ def loadDataTable(table, dbname: str, tablename: str):
         # Close the database connection
         conn.close()
 
-def DataManager(page):
-    lists = ft.ListView([])
-    table1 = ft.DataTable([],bgcolor=ft.Colors.with_opacity(0.3,'#98ffff'),
+table1 = ft.DataTable([],bgcolor=ft.Colors.with_opacity(0.3,'#98ffff'),
                           scale=1,heading_text_style=ft.TextStyle(weight=ft.FontWeight.BOLD),
                           vertical_lines=ft.BorderSide(width=0.4)
                           )
-    table2 = ft.DataTable([],bgcolor=ft.Colors.with_opacity(0.3,'#98ffff'),
+table2 = ft.DataTable([],bgcolor=ft.Colors.with_opacity(0.3,'#98ffff'),
                           scale=1,column_spacing=1,heading_text_style=ft.TextStyle(weight=ft.FontWeight.BOLD),
                           vertical_lines=ft.BorderSide(width=0.4)
                           ) 
+
+def startUpDataLoaderPage(page):
+    loadDataTable(table1, 'preferez','categories',)
+    loadDataTable(table2, 'preferez','tasks')
+
+    page.update()
+
+def DataManager(page):
+    lists = ft.ListView([])
+    
 
 
     data = ft.Container(
@@ -140,8 +148,7 @@ def DataManager(page):
         on_click=lambda _:pick_files_dialog.pick_files(allow_multiple=True),
     ))
 
-    loadDataTable(table1, 'preferez','categories',)
-    loadDataTable(table2, 'preferez','tasks')
+    startUpDataLoaderPage(page)
     
     return ft.SafeArea( 
             content=ft.Column(
