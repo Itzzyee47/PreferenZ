@@ -7,7 +7,7 @@ def Home(page):
                         content=ft.Stack(
                             [
                                 ft.Image(
-                                    src="https://images.unsplash.com/photo-1692158962133-6c97ee651ab9?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                                    src="landing.png",
                                     fit=ft.ImageFit.COVER,
                                     width=page.width,height=page.height,
                                     expand=1 
